@@ -3,9 +3,12 @@ using System.Collections;
 
 public class EggBehavior : MonoBehaviour {
 	Rigidbody2D rigidBody = null;
+	float bounceEffect = 150.0f;
+
 	public float lifespan = 6.0f;
 	public int bounceCount = 2;
 	public int playerNumber = 1;
+	public int attackPower = 15;
 
 	void Start() {
 		rigidBody = GetComponent<Rigidbody2D>();
@@ -26,7 +29,8 @@ public class EggBehavior : MonoBehaviour {
 			}
 		} else if (coll.collider.GetComponent<Durability>() != null)
 		{
-			coll.collider.GetComponent<Durability>().HP -= 1;
+			coll.collider.GetComponent<Durability>().HP -= attackPower;
+			coll.collider.GetComponent<Rigidbody2D>().AddForce(Vector2.up * bounceEffect);
 			DeathEffect();
 		}
 	}

@@ -7,7 +7,12 @@ public class PlayerController : MonoBehaviour {
 	SpriteRenderer spriteRenderer;
 	Vector2 inputVector;
 
+	public float eggFireInterval = 0.3f;
+	float eggWait;
+	float recoil = 300.0f;
+
 	public GameObject eggPrefab;
+	Durability durability;
 
 	public float moveSpeed = 5.0f;
 	public float jumpSpeed = 8.0f;
@@ -20,7 +25,8 @@ public class PlayerController : MonoBehaviour {
 		rigidBody = GetComponent<Rigidbody2D>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		facingRight = spriteRenderer.flipX;
-		
+
+		durability = GetComponent<Durability>();
 		Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer);
 	}
 	
@@ -39,13 +45,18 @@ public class PlayerController : MonoBehaviour {
 
 		// Produce an egg
 		if (Input.GetAxis("Fire" + playerNumber) > 0) {
-			MakeEgg();
+			if (eggWait <= 0 && (durability != null && !durability.IsDead()))
+			{
+				MakeEgg();
+				eggWait = eggFireInterval;
+			}
 		}
 
 		inputVector.Normalize();
+		eggWait -= Time.deltaTime;
 	}
 
-	void MakeEgg(){
+	void MakeEgg() {
 		
 		// Create the game object for an egg
 		GameObject egg = (GameObject)Instantiate(eggPrefab, transform.position, Quaternion.identity);
@@ -53,11 +64,17 @@ public class PlayerController : MonoBehaviour {
 		Rigidbody2D eggRigidBody = egg.GetComponent<Rigidbody2D> (); 
 
 		// Set the velocity of the egg
-		eggRigidBody.velocity = new Vector2(throwSpeed.x * (facingRight ? 1 : -1), throwSpeed.y);
+		eggRigidBody.velocity = new Vector2(throwSpeed.x * (facingRight ? 1 : -1) - rigidBody.velocity.x * 0.4f, throwSpeed.y - Mathf.Abs(rigidBody.velocity.x) * 0.5f);
 		eggRigidBody.angularVelocity = (facingRight ? -1 : 1) * 360;
+		if (rigidBody.velocity.x != 0)
+		{
+			egg.GetComponent<EggBehavior>().bounceCount += 2;
+		}
+
+		rigidBody.AddForce(new Vector2(-0.5f * (facingRight ? 1 : -1), 0.5f) * recoil);
 	}
 
-	void FixedUpdate(){
+	void FixedUpdate() {
 		
 		rigidBody.velocity = new Vector2(inputVector.x * moveSpeed, rigidBody.velocity.y);
 
