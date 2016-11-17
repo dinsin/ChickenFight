@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour {
 		// Set the velocity of the egg
 		eggRigidBody.velocity = new Vector2(throwSpeed.x * (facingRight ? 1 : -1) - rigidBody.velocity.x * 0.4f, throwSpeed.y - Mathf.Abs(rigidBody.velocity.x) * 0.5f);
 		eggRigidBody.angularVelocity = (facingRight ? -1 : 1) * 360;
-		if (rigidBody.velocity.x != 0)
+		if (Mathf.Abs(rigidBody.velocity.x) < 0.2f)
 		{
 			egg.GetComponent<EggBehavior>().bounceCount += 2;
 		}
