@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour {
 	Rigidbody2D rigidBody;
 	SpriteRenderer spriteRenderer;
 	Vector2 inputVector;
-	PhysicsMaterial2D bounceMat;
 
 	public GameObject eggPrefab;
 
@@ -21,8 +20,7 @@ public class PlayerController : MonoBehaviour {
 		rigidBody = GetComponent<Rigidbody2D>();
 		spriteRenderer = GetComponent<SpriteRenderer>();
 		facingRight = spriteRenderer.flipX;
-
-		bounceMat = Resources.Load<PhysicsMaterial2D>("bounce");
+		
 		Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer);
 	}
 	
@@ -32,21 +30,15 @@ public class PlayerController : MonoBehaviour {
 		inputVector = Vector2.zero;
 
 		// Set vertical velocity to jump
-		if (playerNumber == 1 && Input.GetKeyDown(KeyCode.W) ||	playerNumber == 2 && Input.GetKeyDown(KeyCode.UpArrow))	{
+		if (Input.GetAxis("Vertical" + playerNumber) > 0)	{
 			rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpSpeed);
 		}
 
 		// Set inputVector left and right on input
-		if (playerNumber == 1 && Input.GetKey(KeyCode.A) || playerNumber == 2 && Input.GetKey(KeyCode.LeftArrow)) {
-			inputVector += new Vector2(-1.0f, 0.0f);
-		}
-
-		if (playerNumber == 1 && Input.GetKey(KeyCode.D) ||	playerNumber == 2 && Input.GetKey(KeyCode.RightArrow))	{
-			inputVector += new Vector2(1.0f, 0.0f);
-		}
+		inputVector += new Vector2(Input.GetAxis("Horizontal" + playerNumber), 0.0f);
 
 		// Produce an egg
-		if (playerNumber == 1 && Input.GetKeyDown(KeyCode.S) ||	playerNumber == 2 && Input.GetKeyDown(KeyCode.DownArrow)) {
+		if (Input.GetAxis("Fire" + playerNumber) > 0) {
 			MakeEgg();
 		}
 
@@ -59,6 +51,7 @@ public class PlayerController : MonoBehaviour {
 		GameObject egg = (GameObject)Instantiate(eggPrefab, transform.position, Quaternion.identity);
 		egg.layer = gameObject.layer;
 		Rigidbody2D eggRigidBody = egg.GetComponent<Rigidbody2D> (); 
+
 		// Set the velocity of the egg
 		eggRigidBody.velocity = new Vector2(throwSpeed.x * (facingRight ? 1 : -1), throwSpeed.y);
 		eggRigidBody.angularVelocity = (facingRight ? -1 : 1) * 360;
