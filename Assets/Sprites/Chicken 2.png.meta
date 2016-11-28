@@ -1,9 +1,13 @@
 fileFormatVersion: 2
 guid: 9a6c9d9b6c5ec4d4b8da9601337ca648
-timeCreated: 1479330247
+timeCreated: 1479424819
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Chicken 2_0
+    21300002: Chicken 2_1
+    21300004: Chicken 2_2
+    21300006: Chicken 2_3
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -51,7 +55,59 @@ TextureImporter:
   buildTargetSettings: []
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Chicken 2_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 222
+        width: 234.5
+        height: 222
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Chicken 2_1
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 222
+        width: 234.5
+        height: 222
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Chicken 2_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 234.5
+        height: 222
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Chicken 2_3
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 0
+        width: 234.5
+        height: 222
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
     outline: []
   spritePackingTag: 
   userData: 

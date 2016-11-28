@@ -6,7 +6,7 @@ public class Durability : MonoBehaviour {
 
 	public int maxHP = 300;
 	public int HP;
-	public Slider HPBar = null;
+	public RoundTracker rt;
 	bool deadState = false;
 
 	// Use this for initialization
@@ -18,6 +18,10 @@ public class Durability : MonoBehaviour {
 	void Update () {
 		if (deadState)
 		{
+			if (rt.FinishedGame())
+			{
+				return;
+			}
 			HP += 1;
 			if (HP >= maxHP)
 			{
@@ -32,11 +36,8 @@ public class Durability : MonoBehaviour {
 			//Destroy gameObject
 			deadState = true;
 			GetComponent<SpriteRenderer>().color = Color.grey;
+			rt.Increment();
 			//Destroy(gameObject);
-		}
-		if (HPBar != null)
-		{
-			HPBar.value = HP;
 		}
 	}
 

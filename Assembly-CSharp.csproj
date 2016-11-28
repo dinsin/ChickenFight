@@ -47,7 +47,11 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Durability.cs" />
      <Compile Include="Assets\Scripts\EggBehavior.cs" />
+     <Compile Include="Assets\Scripts\EggCounter.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\PlayerHealth.cs" />
+     <Compile Include="Assets\Scripts\RoundTracker.cs" />
+     <Compile Include="Assets\Scripts\VictoryChecker.cs" />
      <Compile Include="Assets\Scripts\WrapContent.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>

@@ -2,20 +2,29 @@
 using System.Collections;
 
 public class WrapContent : MonoBehaviour {
-	
-	void Update(){
-		
-		Vector3 newPosition = transform.position;
+
+	float changeMeter = 0.015f;
+
+	void Update() {
 		Vector3 viewportPosition = Camera.main.WorldToViewportPoint(transform.position);
 
-		if (viewportPosition.x < 0 || viewportPosition.x > 1) {
-			newPosition.x = -newPosition.x * 0.99f;
+		if (viewportPosition.x < -changeMeter)
+		{
+			viewportPosition.x = 1 + changeMeter;
+		}
+		else if (viewportPosition.x > 1 + changeMeter)
+		{
+			viewportPosition.x = -changeMeter;
 		}
 
-		if (viewportPosition.y < 0 || viewportPosition.y > 1) {
-			newPosition.y = -newPosition.y * 0.99f;
+		if (viewportPosition.y < -changeMeter)
+		{
+			viewportPosition.y = 1 + changeMeter;
+		} else if (viewportPosition.y > 1 + changeMeter)
+		{
+			viewportPosition.y = -changeMeter;
 		}
 
-		transform.position = newPosition;
+		transform.position = Camera.main.ViewportToWorldPoint(viewportPosition);
 	}
 }

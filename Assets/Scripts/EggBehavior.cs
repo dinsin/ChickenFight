@@ -8,7 +8,7 @@ public class EggBehavior : MonoBehaviour {
 	public float lifespan = 6.0f;
 	public int bounceCount = 2;
 	public int playerNumber = 1;
-	public int attackPower = 15;
+	public int attackPower = 20;
 
 	void Start() {
 		rigidBody = GetComponent<Rigidbody2D>();
@@ -24,6 +24,7 @@ public class EggBehavior : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.collider.CompareTag("Wall")){
 			bounceCount--;
+			attackPower -= 6;
 			if (bounceCount < 0) {
 				DeathEffect();
 			}
