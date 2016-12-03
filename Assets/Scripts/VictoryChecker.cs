@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class VictoryChecker : MonoBehaviour {
@@ -17,14 +18,33 @@ public class VictoryChecker : MonoBehaviour {
 		if (rt1.FinishedGame())
 		{
 			txt.enabled = true;
-			txt.text = "Player 1 Wins!";
-			//Do Reset After Time
+			txt.text = "Player 1 Wins!\nPress 'Fire' to Restart";
+			//Reset On Input
+			if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Fire2") > 0)
+			{
+				RepeatGame();
+			}
 		}
 		else if (rt2.FinishedGame())
 		{
 			txt.enabled = true;
-			txt.text = "Player 2 Wins!";
-			//Do Reset After Time
+			txt.text = "Player 2 Wins!\nPress 'Fire' to Restart";
+			//Reset On Input
+			if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Fire2") > 0)
+			{
+				RepeatGame();
+			}
 		}
+		if (Input.GetKeyDown(KeyCode.Escape))
+		{
+			SceneManager.LoadScene(0);
+		}
+	}
+
+	void RepeatGame()
+	{
+		txt.text = "";
+		rt1.RepeatGame();
+		rt2.RepeatGame();
 	}
 }

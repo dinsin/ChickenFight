@@ -36,4 +36,12 @@ public class RoundTracker : MonoBehaviour {
 	{
 		return tracker > 2;
 	}
+
+	public void RepeatGame()
+	{
+		tracker = 0;
+		track1.enabled = false;
+		track2.enabled = false;
+		track3.enabled = false;
+	}
 }
