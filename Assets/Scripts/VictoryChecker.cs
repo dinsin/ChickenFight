@@ -18,7 +18,7 @@ public class VictoryChecker : MonoBehaviour {
 		if (rt1.FinishedGame())
 		{
 			txt.enabled = true;
-			txt.text = "Player 1 Wins!\nPress 'Fire' to Restart";
+			txt.text = "Marie Wins!\nPress 'Fire' to Restart";
 			//Reset On Input
 			if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Fire2") > 0)
 			{
@@ -28,7 +28,7 @@ public class VictoryChecker : MonoBehaviour {
 		else if (rt2.FinishedGame())
 		{
 			txt.enabled = true;
-			txt.text = "Player 2 Wins!\nPress 'Fire' to Restart";
+			txt.text = "Suede Wins!\nPress 'Fire' to Restart";
 			//Reset On Input
 			if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Fire2") > 0)
 			{
@@ -43,8 +43,11 @@ public class VictoryChecker : MonoBehaviour {
 
 	void RepeatGame()
 	{
+		SceneManager.LoadScene(1);
+		/* // Too much of a hassle
 		txt.text = "";
 		rt1.RepeatGame();
 		rt2.RepeatGame();
+		*/
 	}
 }

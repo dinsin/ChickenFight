@@ -5,6 +5,7 @@ public class EggBehavior : MonoBehaviour {
 	ScreenShake shaker;
 	float bounceEffect = 150.0f;
 
+	public GameObject explosionEffect;
 	public float lifespan = 6.0f;
 	public int bounceCount = 2;
 	public int playerNumber = 1;
@@ -25,17 +26,16 @@ public class EggBehavior : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.collider.CompareTag("Wall")){
 			bounceCount--;
+			GetComponent<AudioSource>().Play();
 			attackPower *= eggDecay;
 			if (bounceCount < 0) {
 				DeathEffect();
 			}
 		} else if (coll.collider.GetComponent<Durability>() != null)
 		{
-			coll.collider.GetComponent<SoundBank>().PlaySound(1);
-			Durability durab = coll.collider.GetComponent<Durability>();
-			durab.HP = Mathf.Max(durab.HP - attackPower, 0);
+			coll.collider.GetComponent<Durability>().DropHP(attackPower);
+			
 			coll.collider.GetComponent<Rigidbody2D>().AddForce(Vector2.up * bounceEffect);
-			shaker.SetShakeStrength(1.0f);
 			DeathEffect();
 		}
 	}
@@ -43,6 +43,7 @@ public class EggBehavior : MonoBehaviour {
 	void DeathEffect()
 	{
 		//Instantiate animation for death
+		GameObject explosion = (GameObject)Instantiate(explosionEffect, transform.position, Quaternion.identity);
 
 		//Destroy game object
 		Destroy(gameObject);

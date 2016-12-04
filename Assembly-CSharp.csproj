@@ -45,6 +45,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\DestroySelf.cs" />
      <Compile Include="Assets\Scripts\Durability.cs" />
      <Compile Include="Assets\Scripts\EggBehavior.cs" />
      <Compile Include="Assets\Scripts\EggCounter.cs" />
@@ -52,6 +53,9 @@
      <Compile Include="Assets\Scripts\FlightGUI.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
      <Compile Include="Assets\Scripts\PlayerHealth.cs" />
+     <Compile Include="Assets\Scripts\PowerGenerator.cs" />
+     <Compile Include="Assets\Scripts\PowerUpCollector.cs" />
+     <Compile Include="Assets\Scripts\PowerUpToken.cs" />
      <Compile Include="Assets\Scripts\RoundTracker.cs" />
      <Compile Include="Assets\Scripts\ScreenShake.cs" />
      <Compile Include="Assets\Scripts\SoundBank.cs" />
