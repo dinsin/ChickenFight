@@ -43,7 +43,7 @@ public class VictoryChecker : MonoBehaviour {
 
 	void RepeatGame()
 	{
-		SceneManager.LoadScene(1);
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 		/* // Too much of a hassle
 		txt.text = "";
 		rt1.RepeatGame();

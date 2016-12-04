@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class EggBehavior : MonoBehaviour {
-	ScreenShake shaker;
+
 	float bounceEffect = 150.0f;
 
 	public GameObject explosionEffect;
@@ -13,7 +13,7 @@ public class EggBehavior : MonoBehaviour {
 	public float eggDecay = 0.75f;
 
 	void Start() {
-		shaker = FindObjectOfType<ScreenShake>();
+		
 	}
 
 	void Update() {
@@ -43,7 +43,7 @@ public class EggBehavior : MonoBehaviour {
 	void DeathEffect()
 	{
 		//Instantiate animation for death
-		GameObject explosion = (GameObject)Instantiate(explosionEffect, transform.position, Quaternion.identity);
+		Instantiate(explosionEffect, transform.position, Quaternion.identity);
 
 		//Destroy game object
 		Destroy(gameObject);

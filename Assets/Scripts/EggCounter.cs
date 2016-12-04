@@ -4,14 +4,12 @@ using System.Collections;
 
 public class EggCounter : MonoBehaviour {
 
-	Image eggText;
 	public PlayerController pc;
 	float initialWidth;
 	RectTransform rt;
 
 	// Use this for initialization
 	void Start () {
-		eggText = GetComponent<Image>();
 		rt = GetComponent<RectTransform>();
 		initialWidth = rt.rect.width;
 	}

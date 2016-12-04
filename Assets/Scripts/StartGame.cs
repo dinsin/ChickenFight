@@ -13,7 +13,7 @@ public class StartGame : MonoBehaviour {
 	void Update () {
 		if (Input.GetAxis("Fire1") > 0 || Input.GetAxis("Fire2") > 0)
 		{
-			SceneManager.LoadScene(1);
+			SceneManager.LoadScene((int)(Random.value * 2) + 1);
 		}
 	}
 }

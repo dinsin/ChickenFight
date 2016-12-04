@@ -60,9 +60,12 @@
      <Compile Include="Assets\Scripts\ScreenShake.cs" />
      <Compile Include="Assets\Scripts\SoundBank.cs" />
      <Compile Include="Assets\Scripts\StartGame.cs" />
+     <Compile Include="Assets\Scripts\TiltingPlatform.cs" />
      <Compile Include="Assets\Scripts\Timer.cs" />
      <Compile Include="Assets\Scripts\VictoryChecker.cs" />
      <Compile Include="Assets\Scripts\WrapContent.cs" />
+     <None Include="Assets\Resources\Stencil Mask.shader" />
+     <None Include="Assets\Resources\Stencil Draw In Mask.shader" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
