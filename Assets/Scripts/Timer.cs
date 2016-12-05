@@ -4,9 +4,10 @@ using System.Collections;
 
 public class Timer : MonoBehaviour {
 
+	AudioSource audiosource;
 	public RoundTracker rt1, rt2;
 	public Durability player1, player2;
-	public float MaxTime = 60;
+	public float MaxTime = 99;
 	float timeLeft;
 	Text txt;
 
@@ -24,6 +25,11 @@ public class Timer : MonoBehaviour {
 			ResetTimer();
 		if (timeLeft <= 0)
 		{
+			audiosource = GetComponent<AudioSource>();
+			if (audiosource && !audiosource.isPlaying)
+			{
+				audiosource.Play();
+			}
 			if (player1.HP > player2.HP)
 			{
 				rt1.Increment();

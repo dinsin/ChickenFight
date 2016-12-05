@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour {
 	public GameObject eggPrefab;
 	Durability durability;
 	PowerUpCollector powerups;
+	SoundBank sounds;
+	Animator animator;
 
 	public float maxFiniteFlight = 3.0f;
 	float finiteFlight = 0.0f;
@@ -39,6 +41,9 @@ public class PlayerController : MonoBehaviour {
 		Physics2D.IgnoreLayerCollision(gameObject.layer, gameObject.layer);
 		eggCount = maxEggCount;
 		finiteFlight = maxFiniteFlight;
+
+		sounds = GetComponent<SoundBank>();
+		animator = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -55,12 +60,15 @@ public class PlayerController : MonoBehaviour {
 				{
 					finiteFlight = Mathf.Max(finiteFlight - Time.deltaTime, 0);
 					rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
-					GetComponent<SoundBank>().PlaySound(3);
+					if (sounds)
+						sounds.PlaySound(3);
+					if (animator)
+						animator.SetTrigger("TriggerFly");
 				}
 			}
 			else if (rb.velocity.y <= 0)
 			{
-				finiteFlight = Mathf.Min(finiteFlight + Time.deltaTime * Mathf.Clamp(1 + rb.velocity.y, 0.0f, 1.0f) * 1.6f, maxFiniteFlight);
+				finiteFlight = Mathf.Min(finiteFlight + Time.deltaTime * 0.4f, maxFiniteFlight);
 			}
 
 			// Set inputVector left and right on input

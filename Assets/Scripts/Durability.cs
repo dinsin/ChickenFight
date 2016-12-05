@@ -16,6 +16,8 @@ public class Durability : MonoBehaviour {
 	float flashAmount = 0.0f;
 	ScreenShake shaker;
 	SpriteRenderer sr;
+	Animator animator;
+	SoundBank sounds;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +25,8 @@ public class Durability : MonoBehaviour {
 		sr = GetComponent<SpriteRenderer>();
 		origin = sr.sprite;
 		shaker = FindObjectOfType<ScreenShake>();
+		animator = GetComponent<Animator>();
+		sounds = GetComponent<SoundBank>();
 	}
 	
 	// Update is called once per frame
@@ -33,7 +37,8 @@ public class Durability : MonoBehaviour {
 			if (rt && rt.FinishedGame())
 			{
 				sr.color = Color.white;
-				sr.sprite = cooked;
+				if (animator)
+					animator.SetTrigger("TriggerDead");
 				return;
 			}
 			HP += Time.deltaTime * (maxHP * regenAmount);   //Recover 20% each second when dead: 5 second recovery
@@ -59,14 +64,14 @@ public class Durability : MonoBehaviour {
 			if (HP > 0)
 			{
 				shaker.SetShakeStrength(1.0f);
-				GetComponent<SoundBank>().PlaySound(1);
+				sounds.PlaySound(1);
 				//Create FLASHING effect
 				SetFlash(0.3f);
 				GetComponent<PlayerController>().stunLength += 0.1f;
 			} else
 			{
 				shaker.SetShakeStrength(5.0f);
-				GetComponent<SoundBank>().PlaySound(2);
+				sounds.PlaySound(2);
 				SetDead();
 				if (otherPlayer)
 					otherPlayer.SetDead();
