@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿/* ChickenFight
+ * Author: Kevin Zeng, Dinesh Singh, Jon Wu */
+using UnityEngine;
 using System.Collections;
 
 public class EggBehavior : MonoBehaviour {
@@ -10,10 +12,12 @@ public class EggBehavior : MonoBehaviour {
 	public int bounceCount = 2;
 	public int playerNumber = 1;
 	public float attackPower = 30;
-	public float eggDecay = 0.75f;
+	public float eggDecay = 0.8f;
+
+	AudioSource audiosource;
 
 	void Start() {
-		
+		audiosource = GetComponent<AudioSource>();
 	}
 
 	void Update() {
@@ -26,8 +30,9 @@ public class EggBehavior : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D coll){
 		if (coll.collider.CompareTag("Wall")){
 			bounceCount--;
-			GetComponent<AudioSource>().Play();
+			audiosource.Play();
 			attackPower *= eggDecay;
+			audiosource.volume *= eggDecay;
 			if (bounceCount < 0) {
 				DeathEffect();
 			}

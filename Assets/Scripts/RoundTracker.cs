@@ -1,47 +1,97 @@
-﻿using UnityEngine;
+﻿/* ChickenFight
+ * Author: Kevin Zeng, Dinesh Singh, Jon Wu */
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
 public class RoundTracker : MonoBehaviour {
-
-	public Image track1, track2, track3;
-	int tracker = 0;
+	public Sprite emptyTrack, firstPlayerTrack, secondPlayerTrack;
+	public Image[] tracks;
+	int mNumberOfRounds = 3;
+	int mRoundNumber = 0;
+	float mFullSlow = 3.0f;
+	float slowTime;
+	int[] rounds;
 
 	// Use this for initialization
 	void Start () {
-		track1.enabled = false;
-		track2.enabled = false;
-		track3.enabled = false;
-	}
-
-	public void Increment()
-	{
-		tracker += 1;
-		if (tracker > 0)
+		rounds = new int[mNumberOfRounds];
+		for (int i = 0; i < tracks.Length; i++)
 		{
-			track1.enabled = true;
-		}
-		if (tracker > 1)
-		{
-			track2.enabled = true;
-		}
-		if (tracker > 2)
-		{
-			track3.enabled = true;
-			//Finish Game
+			tracks[i].sprite = emptyTrack;
 		}
 	}
 
-	public bool FinishedGame()
+	void Update()
 	{
-		return tracker > 2;
+		if (slowTime > 0)
+		{
+			slowTime -= Time.unscaledDeltaTime;
+			if (slowTime <= 0) {
+				Time.timeScale = 1;
+			}
+			else
+			{
+				Time.timeScale = Mathf.Lerp(1, 0, slowTime / mFullSlow);
+			}
+		}
+	}
+
+	IEnumerator RegrowScaleSize(Transform UIObject, float sizeBoost)
+	{
+		Vector3 initSize = UIObject.localScale;
+		UIObject.localScale = initSize * sizeBoost;
+		while (UIObject.localScale.magnitude > initSize.magnitude * 1.02f)
+		{
+			UIObject.localScale = Vector3.Lerp(UIObject.localScale, initSize, 0.03f);
+			yield return null;
+		}
+		yield return null;
+	}
+
+	public void Increment(int playerNumber)
+	{
+		slowTime = mFullSlow;
+		rounds[mRoundNumber] = playerNumber;
+		if (playerNumber == 1)
+		{
+			tracks[mRoundNumber].sprite = firstPlayerTrack;
+		} else if (playerNumber == 2)
+		{
+			tracks[mRoundNumber].sprite = secondPlayerTrack;
+		}
+		StartCoroutine(RegrowScaleSize(tracks[mRoundNumber].transform, 6));
+		mRoundNumber++;
+	}
+
+	public int FinishedGame()
+	{
+		if (mRoundNumber < mNumberOfRounds / 2 + 1)
+			return 0;
+		int player1Wins = 0;
+		int player2Wins = 0;
+		for (int i = 0; i < mNumberOfRounds; i++)
+		{
+			if (rounds[i] == 1)
+			{
+				player1Wins++;
+			} else if (rounds[i] == 2)
+			{
+				player2Wins++;
+			}
+		}
+		if (player1Wins > player2Wins)
+			return 1;
+		if (player2Wins > player1Wins)
+			return 2;
+		return 0;
 	}
 
 	public void RepeatGame()
 	{
-		tracker = 0;
-		track1.enabled = false;
-		track2.enabled = false;
-		track3.enabled = false;
+		for (int i = 0; i < mNumberOfRounds; i++)
+		{
+			rounds[i] = 0;
+		}
 	}
 }

@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/farm2.unity
+- path: Assets/TitleMenu.unity
   isLoaded: 1
   isActive: 1

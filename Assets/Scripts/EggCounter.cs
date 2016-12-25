@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿/* ChickenFight
+ * Author: Kevin Zeng, Dinesh Singh, Jon Wu */
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 

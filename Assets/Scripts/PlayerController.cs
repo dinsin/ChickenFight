@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿/* ChickenFight
+ * Author: Kevin Zeng, Dinesh Singh, Jon Wu */
+using UnityEngine;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour {
@@ -14,14 +16,15 @@ public class PlayerController : MonoBehaviour {
 	float eggWait;                  // Current fire rate of eggs
 	float eggRegen = 0.75f;			// Affects egg production rate (0.75 seconds to produce an egg)
 	float recoil = 300.0f;			// Additive force when shooting eggs
-	float characterBounce = 400.0f;	// The force when colliding with other characters
+	float characterBounce = 400.0f; // The force when colliding with other characters
+	float boostFactor = 1.3f;
 
 	public GameObject eggPrefab;
 	Durability durability;
 	PowerUpCollector powerups;
 	SoundBank sounds;
 	Animator animator;
-
+	
 	public float maxFiniteFlight = 3.0f;
 	float finiteFlight = 0.0f;
 	public float moveSpeed = 7.0f;
@@ -29,6 +32,10 @@ public class PlayerController : MonoBehaviour {
 	public Vector2 throwSpeed = new Vector2(5.0f, -4.0f);
 	public int playerNumber = 1;
 	bool facingRight;
+
+	float boostSpeed;
+	float flyTrigger;
+	float fireTrigger;
 
 	// Use this for initialization
 	void Start() {
@@ -44,11 +51,12 @@ public class PlayerController : MonoBehaviour {
 
 		sounds = GetComponent<SoundBank>();
 		animator = GetComponent<Animator>();
+
+		boostSpeed = jumpSpeed * boostFactor;
 	}
 	
 	// Update is called once per frame
 	void Update() {
-		
 		inputVector = Vector2.zero;
 
 		if (stunLength <= 0 && !durability.IsFinished())
@@ -59,7 +67,16 @@ public class PlayerController : MonoBehaviour {
 				if (finiteFlight > 0)
 				{
 					finiteFlight = Mathf.Max(finiteFlight - Time.deltaTime, 0);
-					rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+
+					// Does not override positive vertical velocity
+					if (flyTrigger == 0 && rb.velocity.y <= boostSpeed)
+					{
+						// Add some velocity on tapping jump
+						rb.velocity = new Vector2(rb.velocity.x, boostSpeed);
+					} else if (rb.velocity.y <= jumpSpeed)
+					{
+						rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+					}
 					if (sounds)
 						sounds.PlaySound(3);
 					if (animator)
@@ -77,19 +94,26 @@ public class PlayerController : MonoBehaviour {
 			// Produce an egg
 			if (Input.GetAxis("Fire" + playerNumber) > 0)
 			{
-				if (eggCount >= 1 && eggWait <= 0 && (durability != null && !durability.IsDead()))
+				if (eggCount >= 1 && (durability != null && !durability.IsDead()))
 				{
-					eggCount -= powerups.shotCost;
-					MakeEgg(throwSpeed.x, throwSpeed.y);
-					for (int i = 0; i < powerups.mExtraEggThrows; i++)
+					if (eggWait <= 0)
 					{
-						MakeEgg(throwSpeed.x * (1.0f + 1.1f * (Random.value * 2 - 1)), throwSpeed.y * (1.0f + 1.1f * (Random.value * 2 - 1)));
-					}
-					
-					// push player using recoil on shot
-					rb.AddForce(new Vector2(-0.5f * (facingRight ? 1 : -1), 0.5f) * recoil);
+						eggCount -= powerups.shotCost;
+						MakeEgg(throwSpeed.x, throwSpeed.y);
+						for (int i = 0; i < powerups.mExtraEggThrows; i++)
+						{
+							MakeEgg(throwSpeed.x * (1.0f + 1.1f * (Random.value * 2 - 1)), throwSpeed.y * (1.0f + 1.1f * (Random.value * 2 - 1)));
+						}
 
-					eggWait = eggFireInterval;
+						// push player using recoil on shot
+						rb.AddForce(new Vector2(-0.5f * (facingRight ? 1 : -1), 0.5f) * recoil);
+
+						eggWait = eggFireInterval;
+					}
+				} else if (fireTrigger == 0)
+				{
+					// Allow player to regenerate egg amount
+					eggCount += 0.2f;
 				}
 			}
 			else
@@ -103,6 +127,8 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		inputVector.Normalize();
+		flyTrigger = Input.GetAxis("Vertical" + playerNumber);
+		fireTrigger = Input.GetAxis("Fire" + playerNumber);
 		eggWait -= Time.deltaTime;
 		if (eggCount > maxEggCount)
 			eggCount = maxEggCount;
@@ -112,11 +138,11 @@ public class PlayerController : MonoBehaviour {
 		
 		// Create the game object for an egg
 		GameObject egg = (GameObject)Instantiate(eggPrefab, transform.position, Quaternion.identity);
+		EggBehavior eggBehav = egg.GetComponent<EggBehavior>();
 		egg.layer = gameObject.layer;
 		Rigidbody2D eggrb = egg.GetComponent<Rigidbody2D>();
-		egg.transform.localScale *= powerups.sizeChange;
 
-		egg.GetComponent<EggBehavior>().attackPower *= powerups.attackChange;
+		eggBehav.attackPower *= powerups.attackChange;
 
 		eggrb.gravityScale *= powerups.gravityChange;
 
@@ -125,7 +151,7 @@ public class PlayerController : MonoBehaviour {
 			// Set special anti-gravity egg
 			eggrb.gravityScale *= -0.1f;
 			eggrb.velocity = new Vector2(xSpeed * (facingRight ? 1 : -1) * 0.1f, ySpeed * 3.2f);
-			egg.GetComponent<EggBehavior>().bounceCount = 2;
+			eggBehav.bounceCount = 2;
 		}
 		else
 		{
@@ -136,7 +162,8 @@ public class PlayerController : MonoBehaviour {
 			if (Mathf.Abs(rb.velocity.x) < 0.2f)
 			{
 				// if player has small or no x-velocity, add more bounce to egg
-				egg.GetComponent<EggBehavior>().bounceCount += 2;
+				eggBehav.bounceCount += 1;
+				eggBehav.lifespan += 1;
 			}
 		}
 		eggrb.angularVelocity = (facingRight ? -1 : 1) * Random.value * 360.0f;
@@ -148,10 +175,18 @@ public class PlayerController : MonoBehaviour {
 		rb.velocity = Vector2.Lerp(rb.velocity, new Vector2(inputVector.x * moveSpeed * powerups.moveChange, rb.velocity.y), 0.2f);
 
 		if (rb.velocity.x < 0) {
-			facingRight = true;
+			if (!facingRight)
+			{
+				animator.SetTrigger("TriggerTurn");
+				facingRight = true;
+			}
 		} 
 		else if (rb.velocity.x > 0) {
-			facingRight = false;
+			if (facingRight)
+			{
+				animator.SetTrigger("TriggerTurn");
+				facingRight = false;
+			}
 		}
 
 		spriteRenderer.flipX = facingRight;
@@ -167,6 +202,7 @@ public class PlayerController : MonoBehaviour {
 			{
 				eggCount += 0.6f;
 				finiteFlight += 0.2f;
+				animator.SetTrigger("TriggerFly");
 			} else if (yDiff < -0.2f)
 			{
 				stunLength = 0.3f;

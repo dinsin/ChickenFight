@@ -1,10 +1,13 @@
 fileFormatVersion: 2
 guid: 8f628eb151fbcec46ade7b28edbb5eb5
-timeCreated: 1480793166
+timeCreated: 1481915150
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - FloatingTextBox: {fileID: 114000012662763866, guid: 272598e7413fbdb448849a223e71546b,
+      type: 2}
+  - powerupSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
